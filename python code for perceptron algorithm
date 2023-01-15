@@ -1,0 +1,35 @@
+import numpy as np
+
+class Perceptron:
+
+    def __init__(self):
+        self.weights = np.array([-0.5, 0.5, 0.5])
+        self.bias = 0.0
+        self.learning_rate = 0.1
+
+    def activation(self, x):
+        return 1 if x >= 0 else 0
+
+    def predict(self, inputs):
+        weighted_sum = np.dot(inputs, self.weights) + self.bias
+        return self.activation(weighted_sum)
+
+    def train(self, inputs, expected_output):
+        prediction = self.predict(inputs)
+        error = expected_output - prediction
+        self.weights += self.learning_rate * error * inputs
+        self.bias += self.learning_rate * error
+        
+p = Perceptron()
+
+inputs = np.array([[1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]])
+expected_outputs = np.array([0, 0, 0, 1])
+
+for i in range(100):
+    for input, expected_output in zip(inputs, expected_outputs):
+        p.train(input, expected_output)
+
+print(p.predict([1, 0, 0])) # 0
+print(p.predict([1, 1, 0])) # 0
+print(p.predict([1, 0, 1])) # 0
+print(p.predict([1, 1, 1])) # 1
